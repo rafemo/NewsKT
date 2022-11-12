@@ -1,4 +1,4 @@
-package com.rafemo.newskt.fragments
+package com.rafemo.newskt.ui.fragments
 
 import androidx.fragment.app.Fragment
 import com.rafemo.newskt.R

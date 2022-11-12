@@ -6,6 +6,8 @@ plugins {
     id "androidx.navigation.safeargs.kotlin"
 }
 
+final def API_BASE = 'https://newsapi.org'
+
 android {
     namespace 'com.rafemo.newskt'
     compileSdk 33
@@ -17,11 +19,25 @@ android {
         versionCode 1
         versionName "0.0.1"
 
+        manifestPlaceholders += [
+                'can_export_components': 'false'
+        ]
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+            versionNameSuffix "-debug"
+
+            buildConfigField 'String', 'API_BASE', "\"$API_BASE\""
+
+            manifestPlaceholders += [
+                    'can_export_components': 'true'
+            ]
+        }
         release {
+            buildConfigField 'String', 'API_BASE', "\"$API_BASE\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
