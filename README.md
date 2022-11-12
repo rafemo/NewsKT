@@ -19,6 +19,7 @@ Couroutines
 Navigation
 Glide
 
+-------------------------------------------
 
-# Developed by rafemo
-# App for personal improvement and to have fun
+Developed by rafemo
+App for personal improvement and to have fun
