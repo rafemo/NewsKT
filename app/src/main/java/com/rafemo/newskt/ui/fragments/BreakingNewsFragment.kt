@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_breaking_news.*
 
 class BreakingNewsFragment: Fragment(R.layout.fragment_breaking_news) {
 
-    lateinit var viewModel: NewsViewModel
+    private lateinit var viewModel: NewsViewModel
     lateinit var newsAdapter: NewsAdapter
 
     val TAG = "BreakingNewsFragment"

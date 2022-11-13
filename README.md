@@ -15,11 +15,13 @@ News app developed in Kotlin. You can see latest news, storage, delete and save 
 ###### Dependency injection
 - Hilt
 
+###### Images
+- Glide
+
 ###### Other Android libraries
 - Splash
 - Couroutines
 - Navigation
-- Glide
 
 -------------------------------------------
 
