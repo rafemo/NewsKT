@@ -5,6 +5,7 @@ import android.view.View
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.rafemo.newskt.R
 import com.rafemo.newskt.ui.NewsActivity
 import com.rafemo.newskt.ui.viewmodel.NewsViewModel
@@ -24,9 +25,13 @@ class ArticleFragment : Fragment(R.layout.fragment_article) {
 
         webView.apply {
             webViewClient = WebViewClient()
-            loadUrl(article.url)
+            article.url?.let { loadUrl(it) }
         }
 
+        fab.setOnClickListener {
+            viewModel.saveArticle(article)
+            Snackbar.make(view, "Article saved successfully", Snackbar.LENGTH_SHORT).show()
+        }
     }
 
 }
