@@ -4,4 +4,5 @@
     <string name="search_news">Search News</string>
     <string name="breaking_news">Breaking News</string>
     <string name="search_hint">Search...</string>
+    <string name="divider_char">·</string>
 </resources>

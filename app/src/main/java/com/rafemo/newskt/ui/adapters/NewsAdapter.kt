@@ -9,11 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rafemo.newskt.R
 import com.rafemo.newskt.model.Article
+import com.rafemo.newskt.util.formatDateAgo
 import kotlinx.android.synthetic.main.item_article_preview.view.*
 
-class NewsAdapter: RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
+class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
-    inner class ArticleViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+    inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     // Avoid notifyDataSetChanged if items didn't changed
     private val differCallback = object : DiffUtil.ItemCallback<Article>() {
@@ -50,8 +51,11 @@ class NewsAdapter: RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
             Glide.with(this).load(article.urlToImage).into(ivArticleImage)
             tvSource.text = article.source?.name
             tvTitle.text = article.title
-            tvDescription.text = article.description
-            tvPublishedAt.text = article.publishedAt
+            tvPublishedAt.text = formatDate(article.publishedAt)
+
+            ivArticleImage.setOnClickListener {
+
+            }
 
             setOnClickListener {
                 onItemClickListener?.let { it(article) }
@@ -61,6 +65,14 @@ class NewsAdapter: RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     fun setOnItemClickListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
+    }
+
+    private fun formatDate(date: String?): String {
+        return if (date != null) {
+            formatDateAgo(date) ?: date
+        } else {
+            "" // Don't show date if it's unknown
+        }
     }
 
 }

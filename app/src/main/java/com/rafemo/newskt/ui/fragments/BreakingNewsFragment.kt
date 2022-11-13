@@ -1,5 +1,6 @@
 package com.rafemo.newskt.ui.fragments
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.View
