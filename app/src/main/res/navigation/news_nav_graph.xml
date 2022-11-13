@@ -46,6 +46,10 @@
     <fragment
         android:id="@+id/articleFragment"
         android:name="com.rafemo.newskt.ui.fragments.ArticleFragment"
-        android:label="ArticleFragment" />
+        android:label="ArticleFragment" >
+        <argument
+            android:name="article"
+            app:argType="com.rafemo.newskt.model.Article" />
+    </fragment>
 
 </navigation>
