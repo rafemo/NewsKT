@@ -14,6 +14,9 @@ import com.rafemo.newskt.api.Resource
 import com.rafemo.newskt.model.Article
 import com.rafemo.newskt.model.NewsResponse
 import com.rafemo.newskt.repository.NewsRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
@@ -31,6 +34,9 @@ class NewsViewModel(
     val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var searchNewsPage: Int = 1
     var searchNewsResponse: NewsResponse? = null
+
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
 
     init {
         getBreakingNews("us")
@@ -94,6 +100,10 @@ class NewsViewModel(
             if (hasInternetConnection()) {
                 val response = newsRepository.getBreakingNews(countryCode, breakingNewsPage)
                 breakingNews.postValue(handleBreakingNewsResponse(response))
+                viewModelScope.launch {
+                    // Remove splash screen :D
+                    _isLoading.value = false
+                }
             } else {
                 breakingNews.postValue(Resource.Error("No internet connection"))
             }

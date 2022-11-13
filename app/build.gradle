@@ -94,4 +94,7 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
+
+    // SplashScreen
+    implementation 'androidx.core:core-splashscreen:1.0.0'
 }
