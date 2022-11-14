@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rafemo.newskt.App
+import com.rafemo.newskt.api.ErrorCode
 import com.rafemo.newskt.api.Resource
 import com.rafemo.newskt.model.Article
 import com.rafemo.newskt.model.NewsResponse
@@ -106,12 +107,12 @@ class NewsViewModel(
                     _isLoading.value = false
                 }
             } else {
-                breakingNews.postValue(Resource.Error("No internet connection"))
+                breakingNews.postValue(Resource.Error(ErrorCode.NO_INTERNET.message))
             }
         } catch (t: Throwable) {
             when (t) {
-                is IOException -> breakingNews.postValue(Resource.Error("Network failure"))
-                else -> breakingNews.postValue(Resource.Error("Conversion error"))
+                is IOException -> breakingNews.postValue(Resource.Error(ErrorCode.NETWORK_FAILURE.message))
+                else -> breakingNews.postValue(Resource.Error(ErrorCode.CONVERSION_FAILED.message))
             }
         }
     }
@@ -123,12 +124,12 @@ class NewsViewModel(
                 val response = newsRepository.searchNews(searchQuery, searchNewsPage)
                 searchNews.postValue(handleSearchNewsResponse(response))
             } else {
-                searchNews.postValue(Resource.Error("No internet connection"))
+                searchNews.postValue(Resource.Error(ErrorCode.NO_INTERNET.message))
             }
         } catch (t: Throwable) {
             when (t) {
-                is IOException -> searchNews.postValue(Resource.Error("Network failure"))
-                else -> searchNews.postValue(Resource.Error("Conversion error"))
+                is IOException -> searchNews.postValue(Resource.Error(ErrorCode.NETWORK_FAILURE.message))
+                else -> searchNews.postValue(Resource.Error(ErrorCode.CONVERSION_FAILED.message))
             }
         }
     }
