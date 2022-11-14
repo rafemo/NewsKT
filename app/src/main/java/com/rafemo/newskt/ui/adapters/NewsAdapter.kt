@@ -1,8 +1,11 @@
 package com.rafemo.newskt.ui.adapters
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -53,8 +56,8 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
             tvTitle.text = article.title
             tvPublishedAt.text = formatDate(article.publishedAt)
 
-            ivArticleImage.setOnClickListener {
-
+            ivShare.setOnClickListener {
+               shareArticle(context, article)
             }
 
             setOnClickListener {
@@ -73,6 +76,17 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
         } else {
             "" // Don't show date if it's unknown
         }
+    }
+
+    private fun shareArticle(context: Context, article: Article) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "${article.title}\n${article.url}")
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        context.startActivity(shareIntent)
     }
 
 }

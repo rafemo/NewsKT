@@ -96,6 +96,7 @@
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
         android:padding="2dp"
+        android:elevation="8dp"
         android:src="@drawable/ic_share"
         app:layout_constraintBottom_toBottomOf="@+id/tvSource"
         app:layout_constraintEnd_toEndOf="parent"
