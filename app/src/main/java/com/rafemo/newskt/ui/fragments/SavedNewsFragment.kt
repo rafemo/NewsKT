@@ -73,14 +73,6 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
         })
     }
 
-    private fun hideLoading() {
-        paginationProgressBar.visibility = View.INVISIBLE
-    }
-
-    private fun showLoading() {
-        paginationProgressBar.visibility = View.VISIBLE
-    }
-
     private fun setupRecyclerView() {
         newsAdapter = NewsAdapter()
         rvSavedNews.apply {

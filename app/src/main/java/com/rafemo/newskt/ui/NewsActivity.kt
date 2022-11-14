@@ -2,6 +2,7 @@ package com.rafemo.newskt.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatDelegate
