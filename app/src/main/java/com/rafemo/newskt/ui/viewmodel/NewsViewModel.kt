@@ -14,6 +14,7 @@ import com.rafemo.newskt.api.Resource
 import com.rafemo.newskt.model.Article
 import com.rafemo.newskt.model.NewsResponse
 import com.rafemo.newskt.repository.NewsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -90,7 +91,7 @@ class NewsViewModel(
 
     fun getSavedNews() = newsRepository.getSavedNews()
 
-    fun deleteArticle(article: Article) = viewModelScope.launch {
+    fun deleteArticle(article: Article) = viewModelScope.launch(Dispatchers.IO) {
         newsRepository.deleteArticle(article)
     }
 
