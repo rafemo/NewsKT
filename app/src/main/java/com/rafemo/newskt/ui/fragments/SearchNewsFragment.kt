@@ -3,21 +3,19 @@ package com.rafemo.newskt.ui.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AbsListView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.rafemo.newskt.R
 import com.rafemo.newskt.api.Resource
-import com.rafemo.newskt.ui.NewsActivity
 import com.rafemo.newskt.ui.adapters.NewsAdapter
 import com.rafemo.newskt.ui.viewmodel.NewsViewModel
 import com.rafemo.newskt.util.Constants
 import com.rafemo.newskt.util.Constants.Companion.SEARCH_NEWS_TIME_DELAY
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_breaking_news.*
 import kotlinx.android.synthetic.main.fragment_breaking_news.paginationProgressBar
 import kotlinx.android.synthetic.main.fragment_search_news.*
@@ -26,14 +24,14 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SearchNewsFragment : BaseNewsFragment(R.layout.fragment_search_news) {
 
-    lateinit var viewModel: NewsViewModel
+    private val viewModel: NewsViewModel by viewModels()
     lateinit var newsAdapter: NewsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as NewsActivity).viewModel
 
         setupRecyclerView()
 
@@ -60,7 +58,7 @@ class SearchNewsFragment : BaseNewsFragment(R.layout.fragment_search_news) {
             }
         }
 
-        viewModel.searchNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.searchNews.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
                     hideLoading()
@@ -82,13 +80,14 @@ class SearchNewsFragment : BaseNewsFragment(R.layout.fragment_search_news) {
                 is Resource.Error -> {
                     hideLoading()
                     response.message?.let { message ->
-                        Toast.makeText(activity, "An error ocurred: $message", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, "An error ocurred: $message", Toast.LENGTH_SHORT)
+                            .show()
                         Log.e(TAG, "An error ocurred: $message")
                     }
                 }
                 is Resource.Loading -> showLoading()
             }
-        })
+        }
     }
 
     override fun hideLoading() {

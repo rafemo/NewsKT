@@ -1,32 +1,30 @@
 package com.rafemo.newskt.ui.viewmodel
 
-import android.app.Application
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities.*
-import android.os.Build
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rafemo.newskt.App
 import com.rafemo.newskt.api.ErrorCode
 import com.rafemo.newskt.api.Resource
 import com.rafemo.newskt.model.Article
 import com.rafemo.newskt.model.NewsResponse
 import com.rafemo.newskt.repository.NewsRepository
+import com.rafemo.newskt.util.hasInternetConnection
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-class NewsViewModel(
-    app: Application,
-    private val newsRepository: NewsRepository
-) : AndroidViewModel(app) {
+@HiltViewModel
+class NewsViewModel @Inject constructor(
+    private val newsRepository: NewsRepository,
+    @ApplicationContext private val context: Context
+) : ViewModel() {
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage: Int = 1
@@ -99,7 +97,7 @@ class NewsViewModel(
     private suspend fun safeBreakingNewsCall(countryCode: String) {
         breakingNews.postValue(Resource.Loading())
         try {
-            if (hasInternetConnection()) {
+            if (hasInternetConnection(context)) {
                 val response = newsRepository.getBreakingNews(countryCode, breakingNewsPage)
                 breakingNews.postValue(handleBreakingNewsResponse(response))
                 viewModelScope.launch {
@@ -120,7 +118,7 @@ class NewsViewModel(
     private suspend fun safeSearchNewsCall(searchQuery: String) {
         searchNews.postValue(Resource.Loading())
         try {
-            if (hasInternetConnection()) {
+            if (hasInternetConnection(context)) {
                 val response = newsRepository.searchNews(searchQuery, searchNewsPage)
                 searchNews.postValue(handleSearchNewsResponse(response))
             } else {
@@ -132,22 +130,6 @@ class NewsViewModel(
                 else -> searchNews.postValue(Resource.Error(ErrorCode.CONVERSION_FAILED.message))
             }
         }
-    }
-
-    private fun hasInternetConnection(): Boolean {
-        val manager = getApplication<App>()
-            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        val activeNetwork = manager.activeNetwork ?: return false
-        val capabilities = manager.getNetworkCapabilities(activeNetwork) ?: return false
-
-        return when {
-            capabilities.hasTransport(TRANSPORT_WIFI) -> true
-            capabilities.hasTransport(TRANSPORT_CELLULAR) -> true
-            capabilities.hasTransport(TRANSPORT_ETHERNET) -> true
-            else -> false
-        }
-
     }
 
 }
