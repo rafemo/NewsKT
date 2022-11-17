@@ -19,7 +19,7 @@ class NewsRepository @Inject constructor(
     suspend fun searchNews(searchQuery: String, pageNumber: Int) =
         api.searchForNews(searchQuery, pageNumber)
 
-    suspend fun insert(article: Article) = articleDao.insert(article)
+    suspend fun insert(article: Article) = articleDao.insertArticle(article)
 
     fun getSavedNews() = articleDao.getAllArticles()
 
